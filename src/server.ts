@@ -3,7 +3,7 @@ import cors from 'cors';
 import { scrapeMenu } from './scraper';
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT: number = Number(process.env.PORT) || 3000;
 
 // Middleware
 app.use(cors());
@@ -44,8 +44,8 @@ app.post('/scrape-menu', async (req: Request, res: Response) => {
 });
 
 // Start server
-app.listen(PORT, () => {
-  console.log(`🚀 Menu scraper API server running on http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀Menu scraper API server running on port ${PORT}`);
   console.log(`📡 POST endpoint: http://localhost:${PORT}/scrape-menu`);
   console.log(`❤️  Health check: http://localhost:${PORT}/health`);
 });
