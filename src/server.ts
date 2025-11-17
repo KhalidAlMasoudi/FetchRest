@@ -19,26 +19,29 @@ app.post('/scrape-menu', async (req: Request, res: Response) => {
   try {
     const { restaurant } = req.body;
 
-    // Validate input
     if (!restaurant || typeof restaurant !== 'string') {
       return res.status(400).json({
+        success: false,
         error: 'Invalid request',
         message: 'Please provide a "restaurant" field in the request body (string)'
       });
     }
 
-    // Scrape the menu
     const result = await scrapeMenu(restaurant);
 
-    // Return the result
-    res.json(result);
+    return res.json({
+      success: true,
+      restaurant: result.restaurant,
+      source: result.source,
+      count: result.menuItems.length,
+      menuItems: result.menuItems
+    });
   } catch (error: any) {
     console.error('Scraping error:', error);
-    
-    // Return proper error response
-    res.status(500).json({
+    return res.status(500).json({
+      success: false,
       error: 'Scraping failed',
-      message: error.message || 'An unknown error occurred while scraping the menu'
+      message: error?.message ?? 'An unknown error occurred while scraping the menu'
     });
   }
 });
